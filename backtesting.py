@@ -4,7 +4,7 @@ Created on Sat Sep 27 18:07:19 2025
 
 @author: Ozgr
 """
-
+import datetime
 import pandas as pd
 import numpy as np
 import yfinance as yf
@@ -139,9 +139,9 @@ fast_indicator = st.sidebar.slider('FAST_INCICATOR_VALUE',3,250,value=8)
 slow_indicator = st.sidebar.slider('SLOW_INCICATOR_VALUE',3,250,value=21)                                  
 
 stock = st.text_input('Stock Code','IREN')
-start_Date=st.sidebar.date_input('Start Date')
-end_Date=st.sidebar.date_input('End Date')
 
+end_Date=st.sidebar.date_input('End Date')
+start_Date=end_Date-datetime.datetime.timedelta(365)
 
 st.dataframe(backtesting(ticker=stock, signal='Signal_Change', initial_price=10000, commissions=1.5,start=start_Date.strftime('%Y-%m-%d'),end=end_Date.strftime('%Y-%m-%d'),intervals=intervals,indicator=indicator,fast_indicator=fast_indicator,slow_indicator=slow_indicator))
 

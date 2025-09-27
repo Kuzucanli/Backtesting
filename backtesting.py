@@ -141,7 +141,7 @@ slow_indicator = st.sidebar.slider('SLOW_INCICATOR_VALUE',3,250,value=21)
 stock = st.text_input('Stock Code','IREN')
 
 end_Date=st.sidebar.date_input('End Date')
-start_Date=end_Date-datetime.datetime.timedelta(365)
+start_Date=end_Date-datetime.timedelta(365)
 
 st.dataframe(backtesting(ticker=stock, signal='Signal_Change', initial_price=10000, commissions=1.5,start=start_Date.strftime('%Y-%m-%d'),end=end_Date.strftime('%Y-%m-%d'),intervals=intervals,indicator=indicator,fast_indicator=fast_indicator,slow_indicator=slow_indicator))
 

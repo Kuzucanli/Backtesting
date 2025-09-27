@@ -40,6 +40,17 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             df['EMA_Signal'] = np.select(cond_ema,choices_ema,default=0)
             df.loc[df['EMA_Signal'].diff() != 0, 'Signal_Change'] = df['EMA_Signal']
             
+        if indicator=='Close_f_EMA':
+
+            df['FAST_EMA'] = ta.ema(df['Close'], fast_indicator)
+            
+            cond_ema =[((df['FAST_EMA']>df['Close']) & (df['Close'].shift(1)<df['FAST_EMA'].shift(1))),
+                       ((df['FAST_EMA']<df['Close']) & (df['FAST_EMA'].shift(1)>df['Close'].shift(1)))]
+            
+            choices_ema = [1,-1]
+            df['o_EMA_Signal'] = np.select(cond_ema,choices_ema,default=0)
+            df.loc[df['o_EMA_Signal'].diff() != 0, 'Signal_Change'] = df['o_EMA_Signal']
+            
         # sma
         if indicator=='SMA':
             df['FAST_SMA'] = ta.sma(df['Close'], fast_indicator)
@@ -150,7 +161,7 @@ st.header('Backtesting Dashboard')
 
 intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'],default='1d')
 intervals =list(intervals)
-indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA','RSI','KAMA'])
+indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA','RSI','KAMA','Close_f_EMA'])
 
 fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
 slow_indicator = st.sidebar.slider('SLOW_INDICATOR_VALUE',3,250,value=21)                                  

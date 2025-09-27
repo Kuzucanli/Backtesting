@@ -45,55 +45,59 @@ def backtesting(ticker, signal, initial_price, commissions,intervals):
             raise TypeError("initial_price bir tamsayı olmalı.")
         if not isinstance(commissions, float):
             raise TypeError("commissions bir float olmalı.")
-        for interval in intervals:   
+        l=[]
+        try:
+            for interval in intervals:   
+               
+                df=get_stock(ticker,interval)
            
-            df=get_stock(ticker,interval)
-       
-            
-    
-            # Portföy durumunu takip et
-            cash = initial_price  # Nakit miktarı
-            position = 0  # Sahip olunan varlık miktarı
-            portfolio_value = []  # Her adımda portföy değerini sakla
-            alım_sayısı = 0
-            satım_sayısı = 0
-            for i, row in df.iterrows():
-                price = row['Close']
-                sig = row[signal]
                 
-                # Portföy değerini hesapla (nakit + varlıklar)
-                current_value = cash + position * price
-                portfolio_value.append(current_value)
-                
-                # Sinyal işleme
-                if sig == 1:  # Al sinyali
-                    if position == 0:  # Henüz pozisyon yoksa
-                        # Al: Tüm nakit ile varlık al
-                        position = cash / price
-                        commission_cost =  commissions
-                        cash -= commission_cost
-                        cash = 0  # Tüm nakit kullanıldı
-                        alım_sayısı+=1
-                elif sig == -1:  # Sat sinyali
-                    if position > 0:  # Pozisyon varsa
-                        # Sat: Tüm varlığı sat
-                        cash = position * price
-                        commission_cost =  commissions
-                        cash -= commission_cost
-                        position = 0
-                        satım_sayısı+=1
-            # Son portföy değerini hesapla
-            final_value = cash + position * df['Close'].iloc[-1]
-            return pd.DataFrame.from_dict({
-                'ticker':ticker,'interval':interval,
-                'final_value': final_value,
-                'profit': final_value - initial_price,
-                'profit_percentage': str((final_value - initial_price) / initial_price * 100)+"%",
-                'Alım_Sayısı' : alım_sayısı,
-                'Satım_Sayısı' : satım_sayısı
-                
-            })
-            
+        
+                # Portföy durumunu takip et
+                cash = initial_price  # Nakit miktarı
+                position = 0  # Sahip olunan varlık miktarı
+                portfolio_value = []  # Her adımda portföy değerini sakla
+                alım_sayısı = 0
+                satım_sayısı = 0
+                for i, row in df.iterrows():
+                    price = row['Close']
+                    sig = row[signal]
+                    
+                    # Portföy değerini hesapla (nakit + varlıklar)
+                    current_value = cash + position * price
+                    portfolio_value.append(current_value)
+                    
+                    # Sinyal işleme
+                    if sig == 1:  # Al sinyali
+                        if position == 0:  # Henüz pozisyon yoksa
+                            # Al: Tüm nakit ile varlık al
+                            position = cash / price
+                            commission_cost =  commissions
+                            cash -= commission_cost
+                            cash = 0  # Tüm nakit kullanıldı
+                            alım_sayısı+=1
+                    elif sig == -1:  # Sat sinyali
+                        if position > 0:  # Pozisyon varsa
+                            # Sat: Tüm varlığı sat
+                            cash = position * price
+                            commission_cost =  commissions
+                            cash -= commission_cost
+                            position = 0
+                            satım_sayısı+=1
+                # Son portföy değerini hesapla
+                final_value = cash + position * df['Close'].iloc[-1]
+                l.append({
+                    'ticker':ticker,'interval':interval,
+                    'final_value': final_value,
+                    'profit': final_value - initial_price,
+                    'profit_percentage': str((final_value - initial_price) / initial_price * 100)+"%",
+                    'Alım_Sayısı' : alım_sayısı,
+                    'Satım_Sayısı' : satım_sayısı
+                    
+                })
+            return pd.DataFrame.from_dict(l)
+        except:
+            raise
 st.header('Backtesting Dashboard')
 
 intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'])

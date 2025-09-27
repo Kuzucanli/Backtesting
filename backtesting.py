@@ -28,7 +28,7 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             df['T3_Signal'] = np.select(cond_t3,choice_t3,default=0)
             df.loc[df['T3_Signal'].diff() != 0, 'Signal_Change'] = df['T3_Signal']
             
-        # ema
+            #ema
         if indicator=='EMA':
 
             df['FAST_EMA'] = ta.ema(df['Close'], fast_indicator)
@@ -39,7 +39,7 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             choices_ema = [1,-1]
             df['EMA_Signal'] = np.select(cond_ema,choices_ema,default=0)
             df.loc[df['EMA_Signal'].diff() != 0, 'Signal_Change'] = df['EMA_Signal']
-        
+            
         # sma
         if indicator=='SMA':
             df['FAST_SMA'] = ta.sma(df['Close'], fast_indicator)

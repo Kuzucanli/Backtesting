@@ -132,8 +132,8 @@ intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo',
 intervals =list(intervals)
 indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA'])
 
-fast_indicator = st.sidebar.slider('FAST_INCICATOR_VALUE',3,250,value=8)
-slow_indicator = st.sidebar.slider('SLOW_INCICATOR_VALUE',3,250,value=21)                                  
+fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
+slow_indicator = st.sidebar.slider('SLOW_INDICATOR_VALUE',3,250,value=21)                                  
 
 stock = st.text_input('Stock Code','IREN')
 

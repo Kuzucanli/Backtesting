@@ -100,9 +100,10 @@ def backtesting(ticker, signal, initial_price, commissions,intervals):
 st.header('Backtesting Dashboard')
 
 intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'])
+intervals =list(intervals)
 stock = st.text_input('Stock Code','IREN')
 
-st.dataframe(backtesting(ticker=stock, signal='T3_Signal_Change', initial_price=10000, commissions=1.5,intervals=list(intervals)))
+st.dataframe(backtesting(ticker=stock, signal='T3_Signal_Change', initial_price=10000, commissions=1.5,intervals=(intervals)))
 
 
 

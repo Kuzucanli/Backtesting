@@ -46,7 +46,7 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             fast_sma =fast_indicator
             slow_sma =slow_indicator
             df['FAST_SMA'] = ta.sma(df['Close'], fast_sma)
-            df['SLOW_SMA'] = ta.sma(df['Close'], slow_ema)
+            df['SLOW_SMA'] = ta.sma(df['Close'], slow_sma)
             cond_sma =[((df['FAST_SMA']>df['SLOW_SMA']) & (df['FAST_SMA'].shift(1)<df['SLOW_SMA'].shift(1))),
                        ((df['FAST_SMA']<df['SLOW_SMA']) & (df['FAST_SMA'].shift(1)>df['SLOW_SMA'].shift(1)))]
             

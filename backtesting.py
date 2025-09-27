@@ -128,7 +128,7 @@ def backtesting(ticker, signal, initial_price, commissions,start,end,intervals,i
             raise
 st.header('Backtesting Dashboard')
 
-intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'])
+intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'],default='1d')
 intervals =list(intervals)
 indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA'])
 

@@ -136,7 +136,7 @@ fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
 slow_indicator = st.sidebar.slider('SLOW_INDICATOR_VALUE',3,250,value=21)                                  
 
 stock = st.text_input('Stock Code','IREN')
-start_Date=st.sidebar.date_input('Start Date',value=datetime.datetime(2024,1,1))
+start_Date=st.sidebar.date_input('Start Date',value=datetime.datetime(2025,1,1))
 end_Date=st.sidebar.date_input('End Date')
 
 

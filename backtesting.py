@@ -64,8 +64,8 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
         # kama
         if indicator=='KAMA':
             df['KAMA'] = ta.kama(df['Close'])
-            cond_kama=[(df['Close'] > df['KAMA']) & (df['Close'].shift(1) < df['KAMA'].shift(1)),
-                      (df['Close'] < df['KAMA']) & (df['Close'].shift(1) > df['KAMA'].shift(1))]
+            cond_kama=[((df['Close'] > df['KAMA']) & (df['Close'].shift(1) < df['KAMA'].shift(1))),
+                      ((df['Close'] < df['KAMA']) & (df['Close'].shift(1) > df['KAMA'].shift(1)))]
             
             choices_kama= [1,-1]
             df['KAMA_Signal'] = np.select(cond_kama,choices_kama,default=0)

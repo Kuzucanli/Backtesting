@@ -92,6 +92,17 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             choices_bband= [1,-1]
             df['bband_Signal'] = np.select(cond_bband,choices_bband,default=0)
             df.loc[df['bband_Signal'].diff() != 0, 'Signal_Change'] = df['bband_Signal']
+            
+        # supertrend
+        if indicator=='Supertrend':
+            df['Supertrend'] = ta.supertrend(df,10,3)
+            
+            cond_supertrend=[((df['Close'] > df['Supertrend']) & ((df['Close'].shift(1) < df['Supertrend'].shift(1)))),
+                      ((df['Close'] < df['Supertrend']) & ((df['Close'].shift(1) > df['Supertrend'].shift(1))))]
+            
+            choices_supertrend= [1,-1]
+            df['supertrend_Signal'] = np.select(cond_supertrend,choices_supertrend,default=0)
+            df.loc[df['supertrend_Signal'].diff() != 0, 'Signal_Change'] = df['supertrend_Signal']
         
         
         
@@ -172,7 +183,7 @@ st.header('Backtesting Dashboard')
 
 intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'],default='1d')
 intervals =list(intervals)
-indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA','RSI','KAMA','Close_f_EMA','Bollinger Band'])
+indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA','RSI','KAMA','Close_f_EMA','Bollinger Band','Supertrend'])
 
 fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
 slow_indicator = st.sidebar.slider('SLOW_INDICATOR_VALUE',3,250,value=21)                                  

@@ -11,12 +11,12 @@ import yfinance as yf
 import tech_analysis as ta
 import streamlit as st
 
-def get_stock(ticker,start_Date,end_Date,interval):
+def get_stock(ticker,start,end,interval):
     if not isinstance(ticker, str):
         raise TypeError("ticker bir string olmalı.")
         
     try:
-        df = yf.download(ticker,start=start_Date,end=end_Date,interval=interval)
+        df = yf.download(ticker,start=start,end=end,interval=interval)
         df.columns = df.columns.droplevel(1)
         df['T3'] = ta.t3(df['Close'],3,0.7)
         cond = [df['T3']>df['T3'].shift(1),
@@ -29,7 +29,7 @@ def get_stock(ticker,start_Date,end_Date,interval):
         raise
     
 
-def backtesting(ticker, signal, initial_price, commissions,start_Date,end_Date,intervals):
+def backtesting(ticker, signal, initial_price, commissions,start,end,intervals):
         """
         Bir alım-satım stratejisini backtest yapar.
         df: Pandas DataFrame, 'close' ve 'signal' sütunları içerir (1=al, -1=sat, 0=tut).
@@ -49,7 +49,7 @@ def backtesting(ticker, signal, initial_price, commissions,start_Date,end_Date,i
         try:
             for interval in intervals:   
                
-                df=get_stock(ticker,start=start_Date,end=end_Date,interval=interval)
+                df=get_stock(ticker,start=start,end=end,interval=interval)
            
                 
         
@@ -108,10 +108,6 @@ end_Date=st.sidebar.date_input('End Date')
 
 
 st.dataframe(backtesting(ticker=stock, signal='T3_Signal_Change', initial_price=10000, commissions=1.5,start_Date=start_Date,end_Date=end_Date,intervals=(intervals)))
-
-
-
-
 
 
 

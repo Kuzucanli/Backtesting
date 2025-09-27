@@ -30,10 +30,9 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             
         # ema
         if indicator=='EMA':
-            fast_ema =fast_indicator
-            slow_ema =slow_indicator
-            df['FAST_EMA'] = ta.ema(df['Close'], fast_ema)
-            df['SLOW_EMA'] = ta.ema(df['Close'], slow_ema)
+
+            df['FAST_EMA'] = ta.ema(df['Close'], fast_indicator)
+            df['SLOW_EMA'] = ta.ema(df['Close'], slow_indicator)
             cond_ema =[((df['FAST_EMA']>df['SLOW_EMA']) & (df['FAST_EMA'].shift(1)<df['SLOW_EMA'].shift(1))),
                        ((df['FAST_EMA']<df['SLOW_EMA']) & (df['FAST_EMA'].shift(1)>df['SLOW_EMA'].shift(1)))]
             
@@ -43,10 +42,8 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
         
         # sma
         if indicator=='SMA':
-            fast_sma =fast_indicator
-            slow_sma =slow_indicator
-            df['FAST_SMA'] = ta.sma(df['Close'], fast_sma)
-            df['SLOW_SMA'] = ta.sma(df['Close'], slow_sma)
+            df['FAST_SMA'] = ta.sma(df['Close'], fast_indicator)
+            df['SLOW_SMA'] = ta.sma(df['Close'], slow_indicator)
             cond_sma =[((df['FAST_SMA']>df['SLOW_SMA']) & (df['FAST_SMA'].shift(1)<df['SLOW_SMA'].shift(1))),
                        ((df['FAST_SMA']<df['SLOW_SMA']) & (df['FAST_SMA'].shift(1)>df['SLOW_SMA'].shift(1)))]
             

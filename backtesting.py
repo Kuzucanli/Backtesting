@@ -107,7 +107,7 @@ start_Date=st.sidebar.date_input('Start Date')
 end_Date=st.sidebar.date_input('End Date')
 
 
-st.dataframe(backtesting(ticker=stock, signal='T3_Signal_Change', initial_price=10000, commissions=1.5,start_Date=start_Date,end_Date=end_Date,intervals=(intervals)))
+st.dataframe(backtesting(ticker=stock, signal='T3_Signal_Change', initial_price=10000, commissions=1.5,start_Date=start_Date.strftime('%Y-%m-%d'),end_Date=end_Date.strftime('%Y-%m-%d'),intervals=(intervals)))
 
 
 

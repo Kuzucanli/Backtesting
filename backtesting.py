@@ -97,8 +97,8 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
         if indicator=='Supertrend':
             df[['Trend','_dir','Long','Short']] = ta.supertrend(df,10,3)
             
-            cond_supertrend=[df['Long'] ,
-                      df['Short']]
+            cond_supertrend=[df['_dir']>0 ,
+                      df['_dir']<0]
             
             choices_supertrend= [1,-1]
             df['supertrend_Signal'] = np.select(cond_supertrend,choices_supertrend,default=0)

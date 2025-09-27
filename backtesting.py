@@ -16,7 +16,7 @@ def get_stock(ticker,interval):
         raise TypeError("ticker bir string olmalı.")
         
     try:
-        df = yf.download(ticker,start='2025-01-01',interval=interval)
+        df = yf.download(ticker,start='2024-01-01',interval=interval)
         df.columns = df.columns.droplevel(1)
         df['T3'] = ta.t3(df['Close'],3,0.7)
         cond = [df['T3']>df['T3'].shift(1),

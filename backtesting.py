@@ -84,7 +84,8 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             
         # bband
         if indicator=='Bollinger Band':
-            df[['basis','upper','lower']] = ta.bband(20,'SMA',df['Close'])
+            basis,upper,lower = ta.bband(20,'SMA',df['Close'])
+            df['basis'],df['upper'],df['lower'] = basis,upper,lower
             cond_bband=[df['lower'] >= df['Close'],
                       df['Close']>=df['upper']]
             

@@ -11,25 +11,57 @@ import yfinance as yf
 import tech_analysis as ta
 import streamlit as st
 
-def get_stock(ticker,start,end,interval):
+def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator):
     if not isinstance(ticker, str):
         raise TypeError("ticker bir string olmalı.")
         
     try:
         df = yf.download(ticker,start=start,end=end,interval=interval)
         df.columns = df.columns.droplevel(1)
-        df['T3'] = ta.t3(df['Close'],3,0.7)
-        cond = [df['T3']>df['T3'].shift(1),
-               df['T3']<df['T3'].shift(1)]
-        choice = [1,-1]
-        df['T3_Signal'] = np.select(cond,choice,default=0)
-        df.loc[df['T3_Signal'].diff() != 0, 'T3_Signal_Change'] = df['T3_Signal']
+        
+        #T3 signal
+        if indicator=='T3':
+            df['T3'] = ta.t3(df['Close'],3,0.7)
+            cond_t3 = [df['T3']>df['T3'].shift(1),
+                   df['T3']<df['T3'].shift(1)]
+            choice_t3 = [1,-1]
+            df['T3_Signal'] = np.select(cond_t3,choice_t3,default=0)
+            df.loc[df['T3_Signal'].diff() != 0, 'Signal_Change'] = df['T3_Signal']
+            
+        # ema
+        if indicator=='EMA':
+            fast_ema =fast_indicator
+            slow_ema =slow_indicator
+            df['FAST_EMA'] = ta.ema(df['Close'], fast_ema)
+            df['SLOW_EMA'] = ta.ema(df['Close'], slow_ema)
+            cond_ema =[((df['FAST_EMA']>df['SLOW_EMA']) & (df['FAST_EMA'].shift(1)<df['SLOW_EMA'].shift(1))),
+                       ((df['FAST_EMA']<df['SLOW_EMA']) & (df['FAST_EMA'].shift(1)>df['SLOW_EMA'].shift(1)))]
+            
+            choices_ema = [1,-1]
+            df['EMA_Signal'] = np.select(cond_ema,choices_ema,default=0)
+            df.loc[df['EMA_Signal'].diff() != 0, 'Signal_Change'] = df['EMA_Signal']
+        
+        # sma
+        if indicator=='SMA':
+            fast_sma =fast_indicator
+            slow_sma =slow_indicator
+            df['FAST_SMA'] = ta.sma(df['Close'], fast_sma)
+            df['SLOW_SMA'] = ta.sma(df['Close'], slow_ema)
+            cond_sma =[((df['FAST_SMA']>df['SLOW_SMA']) & (df['FAST_SMA'].shift(1)<df['SLOW_SMA'].shift(1))),
+                       ((df['FAST_SMA']<df['SLOW_SMA']) & (df['FAST_SMA'].shift(1)>df['SLOW_SMA'].shift(1)))]
+            
+            choices_sma = [1,-1]
+            df['SMA_Signal'] = np.select(cond_sma,choices_sma,default=0)
+            df.loc[df['SMA_Signal'].diff() != 0, 'Signal_Change'] = df['SMA_Signal']
+        
+        
+        
         return df
     except:
         raise
     
 
-def backtesting(ticker, signal, initial_price, commissions,start,end,intervals):
+def backtesting(ticker, signal, initial_price, commissions,start,end,intervals,indicator,fast_indicator,slow_indicator):
         """
         Bir alım-satım stratejisini backtest yapar.
         df: Pandas DataFrame, 'close' ve 'signal' sütunları içerir (1=al, -1=sat, 0=tut).
@@ -49,8 +81,7 @@ def backtesting(ticker, signal, initial_price, commissions,start,end,intervals):
         try:
             for interval in intervals:   
                
-                df=get_stock(ticker,start=start,end=end,interval=interval)
-           
+                df=get_stock(ticker,start=start,end=end,interval=interval,indicator=indicator,fast_indicator=fast_indicator,slow_indicator=slow_indicator)
                 
         
                 # Portföy durumunu takip et
@@ -102,12 +133,13 @@ st.header('Backtesting Dashboard')
 
 intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'])
 intervals =list(intervals)
+indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA'])
 stock = st.text_input('Stock Code','IREN')
 start_Date=st.sidebar.date_input('Start Date')
 end_Date=st.sidebar.date_input('End Date')
 
 
-st.dataframe(backtesting(ticker=stock, signal='T3_Signal_Change', initial_price=10000, commissions=1.5,start=start_Date.strftime('%Y-%m-%d'),end=end_Date.strftime('%Y-%m-%d'),intervals=(intervals)))
+st.dataframe(backtesting(ticker=stock, signal='Signal_Change', initial_price=10000, commissions=1.5,start=start_Date.strftime('%Y-%m-%d'),end=end_Date.strftime('%Y-%m-%d'),intervals=(intervals)))
 
 
 

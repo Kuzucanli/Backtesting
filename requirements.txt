@@ -3,9 +3,5 @@ yfinance>=0.2.36
 streamlit
 numpy>=1.26.4
 datetime
-plotly 
-curl-cffi>=0.5.9
-scikit-learn>=1.5.0
-prophet
 pip ==25.1.1
 tech_analysis.py

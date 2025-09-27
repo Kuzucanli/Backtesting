@@ -48,10 +48,9 @@ def backtesting(ticker, signal, initial_price, commissions,intervals):
         for interval in intervals:   
             try:
                 df=get_stock(ticker,interval)
-            except:
-                raise
+           
                 
-            try:
+        
                 # Portföy durumunu takip et
                 cash = initial_price  # Nakit miktarı
                 position = 0  # Sahip olunan varlık miktarı

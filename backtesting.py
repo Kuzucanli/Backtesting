@@ -81,6 +81,16 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             choices_kama= [1,-1]
             df['KAMA_Signal'] = np.select(cond_kama,choices_kama,default=0)
             df.loc[df['KAMA_Signal'].diff() != 0, 'Signal_Change'] = df['KAMA_Signal']
+            
+        # bband
+        if indicator=='Bollinger Band':
+            df[['basis','upper','lower']] = ta.bband(20,'SMA',df['Close'])
+            cond_bband=[df['lower'] >= df['Close'],
+                      df['Close']>=df['upper']]
+            
+            choices_bband= [1,-1]
+            df['bband_Signal'] = np.select(cond_bband,choices_bband,default=0)
+            df.loc[df['bband_Signal'].diff() != 0, 'Signal_Change'] = df['bband_Signal']
         
         
         
@@ -161,7 +171,7 @@ st.header('Backtesting Dashboard')
 
 intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'],default='1d')
 intervals =list(intervals)
-indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA','RSI','KAMA','Close_f_EMA'])
+indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA','RSI','KAMA','Close_f_EMA','Bollinger Band'])
 
 fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
 slow_indicator = st.sidebar.slider('SLOW_INDICATOR_VALUE',3,250,value=21)                                  

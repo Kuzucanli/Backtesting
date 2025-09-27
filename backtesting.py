@@ -134,12 +134,16 @@ st.header('Backtesting Dashboard')
 intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'])
 intervals =list(intervals)
 indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA'])
+
+fast_indicator = st.sidebar.slider('FAST_INCICATOR_VALUE',3,250,value=8)
+slow_indicator = st.sidebar.slider('SLOW_INCICATOR_VALUE',3,250,value=21)                                  
+
 stock = st.text_input('Stock Code','IREN')
 start_Date=st.sidebar.date_input('Start Date')
 end_Date=st.sidebar.date_input('End Date')
 
 
-st.dataframe(backtesting(ticker=stock, signal='Signal_Change', initial_price=10000, commissions=1.5,start=start_Date.strftime('%Y-%m-%d'),end=end_Date.strftime('%Y-%m-%d'),intervals=(intervals)))
+st.dataframe(backtesting(ticker=stock, signal='Signal_Change', initial_price=10000, commissions=1.5,start=start_Date.strftime('%Y-%m-%d'),end=end_Date.strftime('%Y-%m-%d'),intervals=intervals,indicator=indicator,fast_indicator=fast_indicator,slow_indicator=slow_indicator))
 
 
 

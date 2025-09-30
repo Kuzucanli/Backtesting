@@ -104,7 +104,9 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             df['supertrend_Signal'] = np.select(cond_supertrend,choices_supertrend,default=0)
             df.loc[df['supertrend_Signal'].diff() != 0, 'Signal_Change'] = df['supertrend_Signal']
         
-        
+        if indicator == 'ATR':
+            pass
+            #df['ATR'] = ta.calculate_atr()
         
         return df
     except:

@@ -998,7 +998,7 @@ tickers_nasdaq = ['AAOI',
 
 initial_price=int(st.sidebar.text_input('Initial Price', value='10000'))
 
-st.dataframe(backtesting(ticker=stock, signal='Signal_Change', initial_price=initial_price, commissions=1.5,start=start_Date.strftime('%Y-%m-%d'),end=end_Date.strftime('%Y-%m-%d'),intervals=intervals,indicator=indicator,fast_indicator=fast_indicator,slow_indicator=slow_indicator))
+st.dataframe(backtesting(ticker=stock, signal='Signal_Change', initial_price=initial_price, commissions=1.5,start=start_Date.strftime('%Y-%m-%d'),end=end_Date.strftime('%Y-%m-%d'),intervals=intervals,indicator=indicator))
 
 
 

@@ -22,7 +22,7 @@ def get_stock(ticker,start,end,interval,indicator):
         #T3 signal
         if indicator=='T3':
             t3_value =st.sidebar.slider('T3 Period',0,20,value=3)
-            t3_factor_value = st.sidebar.slider('T3 Factor Period',0,1,value=0.7,step=0.05)
+            t3_factor_value = st.sidebar.slider('T3 Factor Period',0.01,1.0,value=0.7,step=0.05)
             df['T3'] = ta.t3(df['Close'],t3_value ,t3_factor_value)
             cond_t3 = [df['T3']>df['T3'].shift(1),
                    df['T3']<df['T3'].shift(1)]

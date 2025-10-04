@@ -205,7 +205,7 @@ st.header('Backtesting Dashboard')
 
 intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo','3mo'],default='1d')
 intervals =list(intervals)
-indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA','RSI','KAMA','Close_f_EMA','Bollinger Band','Supertrend'])
+indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA','RSI','KAMA','Close_f_EMA','Bollinger Band','Supertrend','ATR & T3'])
 
 fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
 slow_indicator = st.sidebar.slider('SLOW_INDICATOR_VALUE',3,250,value=21)                                  

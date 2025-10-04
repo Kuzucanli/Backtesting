@@ -107,6 +107,7 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
         if indicator == 'ATR':
             df['ATR'] =ta.calculate_atr(df,14)
         
+<<<<<<< HEAD
         if indicator == 'ATR & T3':
             atr_value = st.sidebar.slider('ATR Period',0,30,value=14)
             t3_value =st.sidebar.slider('T3 Period',0,20,value=3)
@@ -125,6 +126,12 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             df['T3_ATR_Signal'] = np.select(cond_t3_Atr,choices_t3_Atr,default=0)
             df.loc[df['T3_ATR_Signal'].diff() != 0, 'Signal_Change'] = df['T3_ATR_Signal']
 
+=======
+        if indicator == 'ATR':
+            pass
+            #df['ATR'] = ta.calculate_atr()
+        
+>>>>>>> c6b80a4c5034506d2390d608dc883cdf4b156c96
         return df
     except:
         raise

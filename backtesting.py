@@ -11,7 +11,7 @@ import yfinance as yf
 import tech_analysis as ta
 import streamlit as st
 
-def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator):
+def get_stock(ticker,start,end,interval,indicator):
     if not isinstance(ticker, str):
         raise TypeError("ticker bir string olmalı.")
         
@@ -142,7 +142,7 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
         raise
     
 
-def backtesting(ticker, signal, initial_price, commissions,start,end,intervals,indicator,fast_indicator,slow_indicator):
+def backtesting(ticker, signal, initial_price, commissions,start,end,intervals,indicator):
         """
         Bir alım-satım stratejisini backtest yapar.
         df: Pandas DataFrame, 'close' ve 'signal' sütunları içerir (1=al, -1=sat, 0=tut).
@@ -162,7 +162,7 @@ def backtesting(ticker, signal, initial_price, commissions,start,end,intervals,i
         try:
             for interval in intervals:   
                
-                df=get_stock(ticker,start=start,end=end,interval=interval,indicator=indicator,fast_indicator=fast_indicator,slow_indicator=slow_indicator)
+                df=get_stock(ticker,start=start,end=end,interval=interval,indicator=indicator)
                 
         
                 # Portföy durumunu takip et

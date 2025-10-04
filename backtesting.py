@@ -114,7 +114,6 @@ def get_stock(ticker,start,end,interval,indicator):
             
         if indicator == 'ATR':
             
-            atr_value = st.sidebar.slider('ATR Period',0,30,value=14)
             df['ATR'] =ta.calculate_atr(df,14)
         
 

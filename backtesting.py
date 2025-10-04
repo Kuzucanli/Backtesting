@@ -121,7 +121,7 @@ def get_stock(ticker,start,end,interval,indicator):
         if indicator == 'ATR & T3':
             atr_value = st.sidebar.slider('ATR Period',0,30,value=14)
             t3_value =st.sidebar.slider('T3 Period',0,20,value=3)
-            t3_factor_value = st.sidebar.slider('T3 Factor Period',0,1,value=0.7,step=0.05)
+            t3_factor_value = st.sidebar.slider('T3 Factor Period',0.01,1.0,value=0.7,step=0.05)
             
             df['ATR'] =ta.calculate_atr(df,atr_value)
             df['t3'] = ta.t3(df['Close'],t3_value,0.7)

@@ -21,7 +21,9 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
         
         #T3 signal
         if indicator=='T3':
-            df['T3'] = ta.t3(df['Close'],3,0.7)
+            t3_value =st.sidebar.slider('T3 Period',0,20,value=3)
+            t3_factor_value = st.sidebar.slider('T3 Factor Period',0,1,value=0.7,step=0.05)
+            df['T3'] = ta.t3(df['Close'],t3_value ,t3_factor_value)
             cond_t3 = [df['T3']>df['T3'].shift(1),
                    df['T3']<df['T3'].shift(1)]
             choice_t3 = [1,-1]
@@ -30,7 +32,8 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             
             #ema
         if indicator=='EMA':
-
+            fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
+            slow_indicator = st.sidebar.slider('SLOW_INDICATOR_VALUE',3,250,value=21)      
             df['FAST_EMA'] = ta.ema(df['Close'], fast_indicator)
             df['SLOW_EMA'] = ta.ema(df['Close'], slow_indicator)
             cond_ema =[((df['FAST_EMA']>df['SLOW_EMA']) & (df['FAST_EMA'].shift(1)<df['SLOW_EMA'].shift(1))),
@@ -41,7 +44,7 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             df.loc[df['EMA_Signal'].diff() != 0, 'Signal_Change'] = df['EMA_Signal']
             
         if indicator=='Close_f_EMA':
-
+            fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
             df['FAST_EMA'] = ta.ema(df['Close'], fast_indicator)
             
             cond_ema =[((df['FAST_EMA']>df['Close']) & (df['Close'].shift(1)<df['FAST_EMA'].shift(1))),
@@ -53,6 +56,8 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             
         # sma
         if indicator=='SMA':
+            fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
+            slow_indicator = st.sidebar.slider('SLOW_INDICATOR_VALUE',3,250,value=21)      
             df['FAST_SMA'] = ta.sma(df['Close'], fast_indicator)
             df['SLOW_SMA'] = ta.sma(df['Close'], slow_indicator)
             cond_sma =[((df['FAST_SMA']>df['SLOW_SMA']) & (df['FAST_SMA'].shift(1)<df['SLOW_SMA'].shift(1))),
@@ -64,7 +69,8 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             
         # rsı
         if indicator=='RSI':
-            df['RSI'] = ta.rsi(df['Close'] ,14 )
+            rsi_period= st.sidebar.slider('RSI Period',3,200,value=14)
+            df['RSI'] = ta.rsi(df['Close'] ,rsi_period )
             cond_rsi=[df['RSI']<30,
                       df['RSI']>70]
             
@@ -95,7 +101,9 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             
         # supertrend
         if indicator=='Supertrend':
-            df[['Trend','_dir','Long','Short']] = ta.supertrend(df,10,3)
+            supertrend_value =st.sidebar.slider('Supertrend Period',0,20,value=10)
+            supertrend_mult = st.sidebar.slider('Supertrend Multiplier',2,30,value=3)
+            df[['Trend','_dir','Long','Short']] = ta.supertrend(df,supertrend_value,supertrend_mult)
             
             cond_supertrend=[df['_dir']>0 ,
                       df['_dir']<0]
@@ -105,6 +113,8 @@ def get_stock(ticker,start,end,interval,indicator,fast_indicator,slow_indicator)
             df.loc[df['supertrend_Signal'].diff() != 0, 'Signal_Change'] = df['supertrend_Signal']
             
         if indicator == 'ATR':
+            
+            atr_value = st.sidebar.slider('ATR Period',0,30,value=14)
             df['ATR'] =ta.calculate_atr(df,14)
         
 
@@ -207,8 +217,7 @@ intervals = st.sidebar.multiselect('Interval', ['1h','4h','1d','5d','1wk','1mo',
 intervals =list(intervals)
 indicator = st.sidebar.selectbox('Indicator',['T3','EMA','SMA','RSI','KAMA','Close_f_EMA','Bollinger Band','Supertrend','ATR & T3'])
 
-fast_indicator = st.sidebar.slider('FAST_INDICATOR_VALUE',3,250,value=8)
-slow_indicator = st.sidebar.slider('SLOW_INDICATOR_VALUE',3,250,value=21)                                  
+                            
 
 stock = st.text_input('Stock Code','IREN')
 start_Date=st.sidebar.date_input('Start Date',value=datetime.datetime(2025,1,1))

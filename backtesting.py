@@ -129,7 +129,7 @@ def get_stock(ticker,start,end,interval,indicator):
             df['t3_buy'] = (df['t3'] > df['t3'].shift(1)) & (df['t3'].shift(1) <= df['t3'].shift(2))
             df['t3_sell'] = (df['t3'] < df['t3'].shift(1)) & (df['t3'].shift(1) >= df['t3'].shift(2))
             
-            cond_t3_Atr=[(df['t3_buy']) & (df['atr'] > 2),
+            cond_t3_Atr=[(df['t3_buy']) & (df['ATR'] > 2),
                          (df['t3_sell'])]
             
             choices_t3_Atr= [1,-1]
